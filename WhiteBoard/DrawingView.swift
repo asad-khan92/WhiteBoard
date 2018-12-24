@@ -66,10 +66,11 @@ class DrawingView: UIView {
                             
                         for i  in 1...pathArray.count - 1{
                             let point = pathArray[i]
-                            context!.addLine(to: CGPoint.init(x:point.x,y:point.y))
+                             context?.addQuadCurve(to: CGPoint.init(x:point.x,y:point.y), control: CGPoint.init(x:point.x,y:point.y))
+                           // context!.addLine(to: CGPoint.init(x:point.x,y:point.y))
                             }
                         }
-                        
+                    
                         context!.drawPath(using: .stroke)
                     
                 }
@@ -122,7 +123,7 @@ class DrawingView: UIView {
         
         add(touches:touches)
         setNeedsDisplay()
-        self.sendToFirebase()
+        //self.sendToFirebase()
         //resetPath(sendToFirebase: true)
         super.touchesMoved(touches, with: event)
     }
@@ -177,7 +178,7 @@ class DrawingView: UIView {
             
             //self.sendToFirebase()
             self.resetPath()
-            if let path = self.currentSNSPath{
+            if let path = self.currentSNSPath, (self.allKeys.filter{$0 == snapshot.key}).count == 0{
                 self.allPaths.append(path)
                 self.allKeys.append(snapshot.key)
             }
@@ -201,11 +202,13 @@ class DrawingView: UIView {
         
     }
     func resetDrawing(key:String){
-        allKeys.removeLast()
-        allPaths.removeLast()
-        //self.resetPath()
-        setNeedsDisplay()
         
+        if allKeys.count > 0{
+            allKeys.removeLast()
+            allPaths.removeLast()
+            //self.resetPath()
+            setNeedsDisplay()
+        }
     }
     func sendToFirebase(){
         
