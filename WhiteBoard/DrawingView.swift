@@ -32,7 +32,8 @@ class DrawingView: UIView {
     var allPaths =  [SNSPath]()
     var allKeys  =  [String]()
     
-    var id:String       = ""
+    var boardID:String  = ""
+    var userID:String   = ""
     //MARK: Drawing Functions
     
     let firebase = FBWhiteBoardManager.shared
@@ -52,12 +53,19 @@ class DrawingView: UIView {
         let context = UIGraphicsGetCurrentContext()
         context!.beginPath()
         context!.setLineWidth(strokeWidth)
-        context!.setStrokeColor(strokeColor.cgColor)
+        context!.setStrokeColor(strokeColor.cgColor);
         
         
             for path in allPaths{
                 
                 let pathArray  = path.points
+                
+                if path.userID != self.userID{
+                    let color = UIColor.init(hexString:path.colorInHex )
+                    context!.setStrokeColor(color.cgColor)
+                }else{
+                    context!.setStrokeColor(strokeColor.cgColor)
+                }
                 if let firstPoint = pathArray.first{
                         
                         context!.move(to:CGPoint.init(x:firstPoint.x , y: firstPoint.y) )
@@ -91,7 +99,7 @@ class DrawingView: UIView {
             context!.drawPath(using: .stroke)
         }
         
-        
+        context!.setStrokeColor(strokeColor.cgColor)
     }
     
     
@@ -109,7 +117,7 @@ class DrawingView: UIView {
                 currentPath = [CGPoint]()
                 currentPath?.append(point)
                 
-                currentSNSPath = SNSPath.init(point: point, color:strokeColor.toHexString())
+                currentSNSPath = SNSPath.init(point: point, color:strokeColor.toHexString(),id:self.userID)
                 
             }else{
                 print("find an empty touch")
@@ -157,7 +165,7 @@ class DrawingView: UIView {
     
     func addFromFirebase(){
         
-        FBWhiteBoardManager.shared.observeChanges(for: id) { (snapshot) in
+        FBWhiteBoardManager.shared.observeChanges(for: boardID) { (snapshot) in
             
             if snapshot.exists(){
                 do {
@@ -166,7 +174,11 @@ class DrawingView: UIView {
                     
                     let firstPoint = model.points.first
                     let currentPoint = CGPoint(x: firstPoint!.x, y: firstPoint!.y)
-                    self.currentSNSPath = SNSPath(point: currentPoint, color: model.colorInHex)
+                    if model.userID == self.userID{
+                        self.currentSNSPath = SNSPath.init(point: currentPoint, color: model.colorInHex, id: self.boardID)
+                    }else{
+                        self.currentSNSPath = SNSPath.init(point: currentPoint, color:"#D85D2C", id: self.boardID)
+                    }
                     for point in model.points{
                         let p = CGPoint(x: point.x, y: point.y)
                         self.currentSNSPath?.add(point: p)
@@ -190,7 +202,7 @@ class DrawingView: UIView {
     
     func observeBoardCleared(){
         
-        FBWhiteBoardManager.shared.observeBoardCleared(for:id) { (snapshot) in
+        FBWhiteBoardManager.shared.observeBoardCleared(for:boardID) { (snapshot) in
             
             self.resetDrawing(key: snapshot.key)
         }
@@ -214,7 +226,7 @@ class DrawingView: UIView {
         
         if let pathToSend = currentSNSPath{
             
-                let returnKey = FBWhiteBoardManager.shared.updateBoard(id: id, path: pathToSend)
+                let returnKey = FBWhiteBoardManager.shared.updateBoard(id: boardID, path: pathToSend)
             allKeys.append(returnKey)
             allPaths.append(pathToSend)
             //allKeys.append(returnKey)

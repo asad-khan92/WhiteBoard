@@ -11,16 +11,27 @@ import FirebaseDatabase
 
 class ViewController: UIViewController {
     
-    @IBOutlet weak var canvas: DrawingView!
-    @IBOutlet weak var nameField: UITextField!
-    @IBOutlet weak var nameBox: UIView!
+    @IBOutlet weak var canvas:      DrawingView!
+    @IBOutlet weak var nameField:   UITextField!
+    @IBOutlet weak var userID:      UITextField!
+    @IBOutlet weak var nameBox:     UIView!
     
-    var id = ""{
+    var boardName = ""{
         didSet{
-            self.canvas.id = id.lowercased()
-            self.canvas.setBoardObservers()
+            self.canvas.boardID = boardName.lowercased()
+            
         }
     }
+    
+    var userId = ""{
+        
+        didSet{
+            self.canvas.userID = userId.lowercased()
+            
+        }
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.canvas.isUserInteractionEnabled = false
@@ -31,8 +42,8 @@ class ViewController: UIViewController {
     @IBAction func undoPath(_ sender: Any) {
         
         let lastPathKey = self.canvas.allKeys.last
-        if let key = lastPathKey, id != ""{
-            FBWhiteBoardManager.shared.removePath(boardID: id, pathID:key)
+        if let key = lastPathKey, boardName != ""{
+            FBWhiteBoardManager.shared.removePath(boardID: boardName, pathID:key)
 //            self.canvas.allPaths.removeLast()
 //            self.canvas.allKeys.removeLast()
 //            self.canvas.setNeedsDisplay()
@@ -41,8 +52,8 @@ class ViewController: UIViewController {
     }
     @IBAction func clearCanvas(_ sender: Any) {
         
-        if id != ""{
-            FBWhiteBoardManager.shared.resetValues(boardID: id)
+        if boardName != ""{
+            FBWhiteBoardManager.shared.resetValues(boardID: boardName)
             self.canvas.resetPath()
             self.canvas.currentSNSPath = nil
             self.canvas.allPaths.removeAll()
@@ -55,15 +66,23 @@ class ViewController: UIViewController {
 extension ViewController:UITextFieldDelegate{
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if (textField.text?.count)! > 0{
-         textField.resignFirstResponder()
+         
             
-            id =  textField.text!
-            self.canvas.isUserInteractionEnabled = true
+            boardName =  self.nameField.text!
+            userId    = self.userID.text!
             
-            self.nameBox.isHidden = true
-        return true
-        }
+            // check if user name and board id is entered
+            if userId != "", boardName != ""{
+                
+                self.canvas.isUserInteractionEnabled = true
+                self.nameBox.isHidden = true
+                self.canvas.setBoardObservers()
+                textField.resignFirstResponder()
+                
+                 return true
+            }
+       
+        
         return false
     }
 }

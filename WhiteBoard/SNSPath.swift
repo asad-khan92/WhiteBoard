@@ -22,9 +22,12 @@ struct SNSPath:Codable {
     
     var colorInHex: String
     
-    init(point:CGPoint, color:String) {
+    var userID:     String // id to distinguish between own path and someone else's
+    
+    init(point:CGPoint, color:String, id:String) {
         
         self.colorInHex = color
+        self.userID     = id
         points = [SNSPoint]()
         let newPoint = SNSPoint.init(x: point.x, y: point.y)
         
