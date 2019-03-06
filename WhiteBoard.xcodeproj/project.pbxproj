@@ -25,7 +25,6 @@
 		013B493AE7C178AEE45342F0 /* Pods-WhiteBoard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WhiteBoard.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WhiteBoard/Pods-WhiteBoard.debug.xcconfig"; sourceTree = "<group>"; };
 		05458B9F21CE557B0014D1BF /* Encodable+Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Dictionary.swift"; sourceTree = "<group>"; };
 		056E851B21C2718800B867DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		0571F9D321C7F8BB005BDD41 /* WhiteBoard-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WhiteBoard-Bridging-Header.h"; sourceTree = "<group>"; };
 		0571F9D421C7FABD005BDD41 /* SNSPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNSPath.swift; sourceTree = "<group>"; };
 		0571F9D621C808DF005BDD41 /* YLColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YLColor.swift; sourceTree = "<group>"; };
 		0571F9D821C80BCB005BDD41 /* FBWhiteBoardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBWhiteBoardManager.swift; sourceTree = "<group>"; };
@@ -37,6 +36,7 @@
 		058F828B21BFF93400734242 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		058F828D21BFF93400734242 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		058F829321C0172600734242 /* DrawingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingView.swift; sourceTree = "<group>"; };
+		6000D4EF2230062C002DEAEA /* WhiteBoard-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WhiteBoard-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		C1268CE5C0F8CA4F66D43579 /* Pods_WhiteBoard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WhiteBoard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8D28ECDDD93D3E940EF6E6E /* Pods-WhiteBoard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WhiteBoard.release.xcconfig"; path = "Pods/Target Support Files/Pods-WhiteBoard/Pods-WhiteBoard.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -56,10 +56,10 @@
 		058F827521BFF92F00734242 = {
 			isa = PBXGroup;
 			children = (
-				058F828021BFF92F00734242 /* WhiteBoard */,
-				058F827F21BFF92F00734242 /* Products */,
-				551EED4FAB1B4A404DEC8DCB /* Pods */,
 				2F15BED340303ED115A74CFB /* Frameworks */,
+				551EED4FAB1B4A404DEC8DCB /* Pods */,
+				058F827F21BFF92F00734242 /* Products */,
+				058F828021BFF92F00734242 /* WhiteBoard */,
 			);
 			sourceTree = "<group>";
 		};
@@ -74,19 +74,19 @@
 		058F828021BFF92F00734242 /* WhiteBoard */ = {
 			isa = PBXGroup;
 			children = (
-				0571F9D621C808DF005BDD41 /* YLColor.swift */,
-				056E851B21C2718800B867DA /* GoogleService-Info.plist */,
 				058F828121BFF92F00734242 /* AppDelegate.swift */,
-				058F828321BFF92F00734242 /* ViewController.swift */,
-				058F828521BFF92F00734242 /* Main.storyboard */,
 				058F828821BFF93400734242 /* Assets.xcassets */,
-				058F828A21BFF93400734242 /* LaunchScreen.storyboard */,
-				058F828D21BFF93400734242 /* Info.plist */,
 				058F829321C0172600734242 /* DrawingView.swift */,
-				0571F9D321C7F8BB005BDD41 /* WhiteBoard-Bridging-Header.h */,
-				0571F9D421C7FABD005BDD41 /* SNSPath.swift */,
-				0571F9D821C80BCB005BDD41 /* FBWhiteBoardManager.swift */,
 				05458B9F21CE557B0014D1BF /* Encodable+Dictionary.swift */,
+				0571F9D821C80BCB005BDD41 /* FBWhiteBoardManager.swift */,
+				056E851B21C2718800B867DA /* GoogleService-Info.plist */,
+				058F828D21BFF93400734242 /* Info.plist */,
+				058F828A21BFF93400734242 /* LaunchScreen.storyboard */,
+				058F828521BFF92F00734242 /* Main.storyboard */,
+				0571F9D421C7FABD005BDD41 /* SNSPath.swift */,
+				058F828321BFF92F00734242 /* ViewController.swift */,
+				6000D4EF2230062C002DEAEA /* WhiteBoard-Bridging-Header.h */,
+				0571F9D621C808DF005BDD41 /* YLColor.swift */,
 			);
 			path = WhiteBoard;
 			sourceTree = "<group>";
@@ -392,7 +392,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = attribe.mobitribe.whiteboard.visconn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/asadkhan/Documents/Projects/WhiteBoard/WhiteBoard/WhiteBoard-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/aurangzaibasadkhan/Downloads/whiteboard_try/WhiteBoard/WhiteBoard-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -415,7 +415,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = attribe.mobitribe.whiteboard.visconn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/asadkhan/Documents/Projects/WhiteBoard/WhiteBoard/WhiteBoard-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/aurangzaibasadkhan/Downloads/whiteboard_try/WhiteBoard/WhiteBoard-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -9,8 +9,8 @@
 import UIKit
 import CoreGraphics
 import CodableFirebase
-class DrawingView: UIView {
-    
+
+class DrawingView: UIView { // UIView { // UIScrollView {
     
     @IBInspectable
     public var strokeColor: UIColor = .black {
@@ -31,94 +31,76 @@ class DrawingView: UIView {
     var currentSNSPath: SNSPath?
     var allPaths =  [SNSPath]()
     var allKeys  =  [String]()
-    
     var boardID:String  = ""
     var userID:String   = ""
     //MARK: Drawing Functions
     
     let firebase = FBWhiteBoardManager.shared
     
-    
-    
-//    required init?(coder aDecoder: NSCoder) {
-//        super.init(coder: aDecoder)
-//        self.addFromFirebase()
-//    }
-//
+    //    required init?(coder aDecoder: NSCoder) {
+    //        super.init(coder: aDecoder)
+    //        self.addFromFirebase()
+    //    }
+    //
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        
         
         let context = UIGraphicsGetCurrentContext()
         context!.beginPath()
         context!.setLineWidth(strokeWidth)
         context!.setStrokeColor(strokeColor.cgColor);
         
-        
-            for path in allPaths{
-                
-                let pathArray  = path.points
-                
-                if path.userID != self.userID{
-                    let color = UIColor.init(hexString:path.colorInHex )
-                    context!.setStrokeColor(color.cgColor)
-                }else{
-                    context!.setStrokeColor(strokeColor.cgColor)
-                }
-                if let firstPoint = pathArray.first{
-                        
-                        context!.move(to:CGPoint.init(x:firstPoint.x , y: firstPoint.y) )
-                        
-                    if pathArray.count > 1{
-                            
-                        for i  in 1...pathArray.count - 1{
-                            let point = pathArray[i]
-                             context?.addQuadCurve(to: CGPoint.init(x:point.x,y:point.y), control: CGPoint.init(x:point.x,y:point.y))
-                           // context!.addLine(to: CGPoint.init(x:point.x,y:point.y))
-                            }
-                        }
-                    
-                        context!.drawPath(using: .stroke)
-                    
-                }
+        for path in allPaths{
+            
+            let pathArray  = path.points
+            
+            if path.userID != self.userID{
+                let color = UIColor.init(hexString:path.colorInHex )
+                context!.setStrokeColor(color.cgColor)
+            }else{
+                context!.setStrokeColor(strokeColor.cgColor)
             }
-        
+            
+            if let firstPoint = pathArray.first{
+                context!.move(to:CGPoint.init(x:firstPoint.x , y: firstPoint.y) )
+                
+                if pathArray.count > 1{
+                    for i  in 1...pathArray.count - 1{
+                        let point = pathArray[i]
+                        context?.addQuadCurve(to: CGPoint.init(x:point.x,y:point.y), control: CGPoint.init(x:point.x,y:point.y))
+                        // context!.addLine(to: CGPoint.init(x:point.x,y:point.y))
+                    }
+                }
+                context!.drawPath(using: .stroke)
+            }
+        }
         
         if let firstPath = currentPath?.first{
-            
             context!.move(to: firstPath)
             
             if currentPath!.count > 1{
-                
                 for i  in 1...currentPath!.count - 1{
                     context!.addLine(to: currentPath![i])
                 }
             }
-            
             context!.drawPath(using: .stroke)
         }
-        
         context!.setStrokeColor(strokeColor.cgColor)
     }
-    
-    
     
     //MARK: Touch Functions
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        
         if currentPath == nil{
             currentTouch  = UITouch()
             currentTouch  = touches.first
-            let currentPoint = currentTouch?.location(in: self)
             
+            let currentPoint = currentTouch?.location(in: self)
             if let point = currentPoint{
                 currentPath = [CGPoint]()
                 currentPath?.append(point)
-                
                 currentSNSPath = SNSPath.init(point: point, color:strokeColor.toHexString(),id:self.userID)
-                
             }else{
                 print("find an empty touch")
             }
@@ -143,7 +125,6 @@ class DrawingView: UIView {
         resetPath()
         super.touchesEnded(touches, with: event)
     }
-    
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         
@@ -196,14 +177,11 @@ class DrawingView: UIView {
             }
             self.setNeedsDisplay()
         }
-        
     }
-    
     
     func observeBoardCleared(){
         
         FBWhiteBoardManager.shared.observeBoardCleared(for:boardID) { (snapshot) in
-            
             self.resetDrawing(key: snapshot.key)
         }
     }
@@ -213,6 +191,7 @@ class DrawingView: UIView {
         currentPath   = nil
         
     }
+    
     func resetDrawing(key:String){
         
         if allKeys.count > 0{
@@ -222,36 +201,34 @@ class DrawingView: UIView {
             setNeedsDisplay()
         }
     }
+    
     func sendToFirebase(){
         
         if let pathToSend = currentSNSPath{
             
-                let returnKey = FBWhiteBoardManager.shared.updateBoard(id: boardID, path: pathToSend)
+            let returnKey = FBWhiteBoardManager.shared.updateBoard(id: boardID, path: pathToSend)
             allKeys.append(returnKey)
             allPaths.append(pathToSend)
             //allKeys.append(returnKey)
         }
     }
+    
     func add(touches:Set<UITouch>){
         
         if currentPath != nil{
-            
             for touch in touches{
                 if touch == currentTouch{
-                    
                     let currentPoint = currentTouch?.location(in: self)
                     
                     if let point = currentPoint{
                         currentPath?.append(point)
                         currentSNSPath?.add(point: point)
-                        
                     }else{
                         print("find an empty touch")
                     }
                 }
             }
         }
-        
         setNeedsDisplay()
     }
 }
